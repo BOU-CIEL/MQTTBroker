@@ -5,9 +5,18 @@ services:
     image: eclipse-mosquitto 
     container_name: mqtt_brocker 
     ports: 
-      - "1883:1883" # TCP 
+      - "1883:1883" # TCP
+      - "9001:9001" # WebSocket
     volumes: 
       - ./mosquitto/config:/mosquitto/config 
       - ./mosquitto/data:/mosquitto/data 
       - ./mosquitto/log:/mosquitto/log 
-    restart: unless-stopped 
+    restart: unless-stopped
+  mqttx-web:
+    image: emqx/mqttx-web
+    container_name: mqttx-web
+    ports:
+      - "8081:80" # Inteface Web
+    depends_on:
+      - mqtt
+    restart: unless-stopped
